@@ -61,18 +61,21 @@ body {
 }
    
 .form-wrapper input {
+    background-color: rgb(92, 89, 89);
      padding: 10px;
      margin-bottom: 10px;
      border: 1px solid #ccc;
      border-radius: 5px;
      font-size: 16px;
+     color: white;
+     border: none;
 }
    
 .form-wrapper button {
     padding: 10px;
      border: none;
      border-radius: 5px;
-     background-color: #007bff;
+     background-color: #020202;
      color: white;
      font-size: 16px;
      cursor: pointer;
@@ -84,26 +87,28 @@ body {
 }
    
 button:hover {
-    background-color: #da190b; /* Dark Red */
+    background-color: #da190bd7; /* Dark Red */
     color: white;
 }
 
 .download-button{
     display: block;
     margin-top: 5%;
-    margin-left: 32%;
-    width: 20%;
-    padding: 10px 20px;
+    margin-left: 25%;
+    width: 30%;
+    padding: 12px 20px;
     font-size: 16px;
-    border-radius: 15px;
+    border-radius: 5px;
     border: none;
-    background-color: #007bff;
+    background-color: #020202;
     color: white;
     cursor: pointer;
+    transition: background-color 0.3s ease;
 }
 
 .download-button:hover {
     background-color: #da190b;
+    opacity: 0.8;
 }
    
 .div {
@@ -112,6 +117,36 @@ button:hover {
     align-items: center;
     justify-content: center;
 }
+
+
+#profilePhoto {
+     padding: 10px;
+     border: none;
+     border-radius: 5px;
+     background-color: rgb(92, 89, 89);
+     color: white;
+     font-size: 16px;
+     transition: background-color 0.3s ease;
+     cursor: pointer;
+
+
+
+}
+
+#lojaSelecionada {
+     color: black;
+     padding: 10px;
+     border: none;
+     border-radius: 5px;
+     background-color: rgb(92, 89, 89);
+     color: white;
+     font-size: 16px;
+     transition: background-color 0.3s ease;
+     margin-bottom: 7px;
+     cursor: pointer;
+}
+
+
 
 @font-face {
     font-family: 'Gilroy-bold';
