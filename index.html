@@ -10,12 +10,18 @@
         <a href="https://www.grupoagp.com.br/" target="_blank">
             <img src="img/logo_agp.png" alt="" class="agp-logo">
         </a>
-        <h1 class="page-title">Sistema de Assinaturas </h1><br>
+        <h1 class="page-title">Sistema de Assinaturas</h1><br>
         <div class="form-wrapper">
-            <input id="nomeColaborador" type="text" placeholder="Nome e sobrenome do colaborador">
-            <input id="cargoColaborador" type="text" placeholder="Cargo do colaborador">
-            <input id="telefoneColaborador" type="text" placeholder="Telefone do colaborador">
-            <input type="file" id="profilePhoto" accept="image/*">
+            <input id="nomeColaborador" type="text" placeholder="Nome e sobrenome do colaborador"><br><br>
+            <input id="cargoColaborador" type="text" placeholder="Cargo do colaborador"><br><br>
+            <input id="telefoneColaborador" type="text" placeholder="Telefone do colaborador"><br><br>
+            <label for="desejaAdicionarFoto" class="checkbox-label">
+                <input type="checkbox" id="desejaAdicionarFoto" onclick="mostrarEsconderPhoto()">
+                Deseja adicionar uma foto de perfil?
+            </label>
+            <div id="profilePhotoSelection" class="profile-photo-selection">
+                <input type="file" id="profilePhoto" accept="image/*">
+            </div><br><br>
             <select id="lojaSelecionada">
                 <option value="grupoAgp">Grupo AGP</option>
                 <option value="extremaJlr">Extrema JLR</option>
@@ -23,20 +29,14 @@
                 <option value="orionKia">Orion KIA</option>
                 <option value="truckfor">Truckfor</option>
                 <option value="triumph">Triumph</option>
-           </select>
-           <button onclick="criarAssinatura()">Criar Assinatura</button>
+            </select><br><br>
+            <button onclick="criarAssinatura()">Criar Assinatura</button>
         </div>
     </div>
     <div id="assinaturaCriada"></div>
     <script src="script.js"></script>
 </body>
 </html>
-
-
-
-
-
-
 
 
 

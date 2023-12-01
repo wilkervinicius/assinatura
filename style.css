@@ -120,7 +120,8 @@ button:hover {
 
 
 #profilePhoto {
-     padding: 10px;
+    width: 96%;
+     padding: 5px;
      border: none;
      border-radius: 5px;
      background-color: rgb(92, 89, 89);
@@ -128,9 +129,53 @@ button:hover {
      font-size: 16px;
      transition: background-color 0.3s ease;
      cursor: pointer;
+}
 
 
+.checkbox-label {
+    align-items: center;
+    display: block;
+    margin-bottom: 1px;
+    font-size: 13px;
+    font-weight: bold;
+    color: white;
+    height: 40px;
+    cursor: pointer;
 
+}
+
+input[type="checkbox"] {
+    appearance: none;
+    -webkit-appearance: none;
+    -moz-appearance: none;
+    width: 20px;
+    height: 20px;
+    border: 2px solid #070606;
+    border-radius: 3px;
+    outline: none;
+    cursor: pointer;
+    vertical-align: middle;
+  }
+
+  /* Estilizando quando a checkbox está marcada */
+  input[type="checkbox"]:checked {
+    background-color: black;
+    border-color: #da190b;
+  }
+  
+  
+/* Estilizando o marcador (símbolo) da checkbox quando está marcada */
+  input[type="checkbox"]:checked::after {
+    content: "\2713"; /* Símbolo de marca de seleção */
+    font-size: 14px;
+    color: rgb(253, 247, 247);
+    text-align: center;
+    line-height: 20px;
+  }
+
+.profile-photo-selection {
+    display: none;
+    cursor: pointer;
 }
 
 #lojaSelecionada {
