@@ -8,40 +8,46 @@ function mostrarEsconderPhoto() {
 
 //Função principal para criar a assinatura
 function criarAssinatura() {
-    var container = document.getElementById('assinaturaCriada');
-    while (container.firstChild) { 
+    var container = document.getElementById('assinaturaCriada'); // Cria uma variável  container a qual tem relação estrutural com o elemento do HTML
+    while (container.firstChild) { // Lógica para remober a imagem gerada após cada vez que o botão de criar assinatura for criado 
         container.removeChild(container.firstChild);
     }
-    var lojaSelecionada = document.getElementById('lojaSelecionada').value; 
-    var canvas = document.createElement("canvas"); 
-    var ctx = canvas.getContext("2d", { alpha: true });
-    var img = new Image();
-    img.crossOrigin = 'anonymous';  
 
-    img.onload = function() {
+    // Variável que seleciona a loja a qual o usuário deseja fazer a sua assinatura de e-mail 
+    var lojaSelecionada = document.getElementById('lojaSelecionada').value; 
+    var canvas = document.createElement("canvas"); // Variável Canvas que escreve os meus elementos na imagem 
+    var ctx = canvas.getContext("2d", { alpha: true });
+    var img = new Image(); // Inicio uma nova variável 
+    img.crossOrigin = 'anonymous'; // Importante para não gerar erro de CORS
+
+    img.onload = function() { // Função que define o canvas com suas estruras iniciais na tela, comprimento e largura 
         canvas.width = img.width;
         canvas.height = img.height;
-        ctx.drawImage(img, 0, 0, img.width, img.height);
-        var font1 = new FontFace("Gilroy-bold", "url('fonts/gilroy-bold.otf')", {});
+        ctx.drawImage(img, 0, 0, img.width, img.height); // COmeça a criar na tela de acordo com seu comprimento e largura definidos anteriormente 
+        var font1 = new FontFace("Gilroy-bold", "url('fonts/gilroy-bold.otf')", {}); // Crio duas varuáveis, uma para cada fonte para garantir a sincronização da fonte nova com os elemntos do meu canvas 
         var font2 = new FontFace("Gilroy-light", "url('fonts/gilroy-light.otf')", {});
 
+        // Fonte carregada na tela 
         font1.load().then(function(loaded_face) {
             document.fonts.add(loaded_face);
-        }).catch(function(error) {
+        }).catch(function(error) { // Caso tenha algum erro, irá gerar um console log, para fazer o devido tratamento do erro; 
             console.log('Erro ao carregar a fonte:', error);
         });
 
         font2.load().then(function(loaded_face) {
             document.fonts.add(loaded_face);
             
+            // Inicio três variáveis, uma para cada elemento HTML, o qual será subscrito no canvas; 
             var nome = document.getElementById('nomeColaborador').value;
             var cargo = document.getElementById('cargoColaborador').value;
             var telefone = document.getElementById('telefoneColaborador').value;
 
+            // Definição inicial para o font-size das minhas variáveis 
             var nomeFontSize = 25;
             var cargoFontSize = 18;
             var telefoneFontSize = 18;
 
+            // Aplicando a inscrição no canvas com as variáveis definidas 
             ctx.font = nomeFontSize + "px Gilroy-bold";
             var nomeWidth = ctx.measureText(nome).width;
             ctx.font = cargoFontSize + "px Gilroy-light";
@@ -49,13 +55,16 @@ function criarAssinatura() {
             ctx.font = telefoneFontSize + "px Gilroy-bold";
             var telefoneWidth = ctx.measureText(telefone).width;
 
+            // Variáveis de nomes, cargo, telefone;
             var nomeX = (canvas.width - nomeWidth) / 2;
             var cargoX = (canvas.width - cargoWidth) / 2;
             var telefoneX = (canvas.width - telefoneWidth) / 2;
-
+            
+            // Variável do ícone do whatsapp 
             var whatsappImg = new Image();
             whatsappImg.src = './img/whatsapp_icon.png'; 
             
+            // Inicia a função que será carregado o ícone do whatsapp 
             whatsappImg.onload = function() {
                 var iconSize = 100; 
                 var iconX = telefoneX - iconSize + 40; 
