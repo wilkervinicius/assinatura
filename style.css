@@ -1,8 +1,9 @@
+/* Estilos gerais */
 body {
     display: flex;
     justify-content: center;
     align-items: center;
-    height: 100vh;
+    min-height: 100vh;
     margin: 0;
     font-family: "Roboto Mono", monospace;
     text-align: center;
@@ -11,106 +12,101 @@ body {
     background-size: cover;
     background-position: center top;
     background-repeat: no-repeat;
- }
-   
-      
-.container {
-     text-align: center;
-     padding: 20px;
-}
-   
-.page-logo {
-     width: 300px;
-     position: absolute;
-     top: 0;
-}
-   
-.page-title {
-     color: #ffffff;
-     margin: 0 0 5px;
-     font-size: 25px;
-}
-   
- 
-.agp-logo {
-    width: 200px;
-    margin-bottom: 20px;
-   
+    padding: 20px;
 }
 
- 
-#assinaturaCriada img {
-    position: relative;
-    top: 50px;
-    margin: 10px;
-    max-height: 300px;
+/* Container centralizado e com padding */
+.container {
+    text-align: center;
+    padding: 20px;
+    width: 100%;
+    max-width: 500px;
+    background-color: rgba(0, 0, 0, 0.4); /* Fundo semitransparente para contraste */
+    border-radius: 10px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+    margin: auto; /* Centraliza o container */
+    box-sizing: border-box; /* Inclui padding e bordas na largura total */
 }
-   
+
+/* Ajuste da largura da logo */
+.agp-logo {
+    width: 100%;
+    max-width: 350px;
+    margin: 0 auto -50px;
+    display: block;
+}
+
+/* TÃ­tulo da pÃ¡gina */
+.page-title {
+    color: #ffffff;
+    margin: 0 0 20px;
+    font-size: 2rem;
+}
+
+/* Flex layout para a Ã¡rea de assinatura criada */
 #assinaturaCriada {
     display: flex;
     flex-wrap: wrap;
-    justify-content: space-between;
-}
-   
-.form-wrapper {
-     margin: 0 0 15px;
-     display: flex;
-     flex-direction: column;
-     max-width: 300px;
-     margin: 0 auto;
-}
-   
-.form-wrapper input {
-    background-color: rgb(92, 89, 89);
-     padding: 10px;
-     margin-bottom: 10px;
-     border: 1px solid #ccc;
-     border-radius: 5px;
-     font-size: 16px;
-     color: white;
-     border: none;
-}
-   
-.form-wrapper button {
-    padding: 10px;
-     border: none;
-     border-radius: 5px;
-     background-color: #020202;
-     color: white;
-     font-size: 16px;
-     cursor: pointer;
-     transition: background-color 0.3s ease;
-}
-   
-.form-wrapper button:hover {
-     opacity: 0.8;
-}
-   
-button:hover {
-    background-color: #da190bd7; /* Dark Red */
-    color: white;
+    justify-content: center;
+    gap: 20px;
 }
 
-.download-button{
+/* FormulÃ¡rio responsivo */
+.form-wrapper {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 15px;
+}
+
+/* EstilizaÃ§Ã£o dos inputs */
+.form-wrapper input,
+.form-wrapper select,
+.form-wrapper button {
+    background-color: #242020;
+    padding: 15px;
+    border: none;
+    border-radius: 5px;
+    font-size: 1rem;
+    color: white;
+    width: 100%;
+    max-width: 400px; /* Consistente para todos os campos */
+    box-sizing: border-box;
+}
+
+/* Hover nos botÃµes */
+.form-wrapper button {
+    background-color: #da190bd7;
+    transition: background-color 0.3s ease, opacity 0.3s ease;
+    cursor: pointer;
+}
+
+.form-wrapper button:hover {
+    background-color: #b01709;
+    opacity: 0.8;
+}
+
+/* BotÃ£o de download */
+.download-button {
     display: block;
-    margin-top: 5%;
-    margin-left: 25%;
-    width: 30%;
+    margin-top: 20px;
+    width: 100%;
     padding: 12px 20px;
-    font-size: 16px;
+    font-size: 1rem;
     border-radius: 5px;
     border: none;
     background-color: #020202;
     color: white;
     cursor: pointer;
-    transition: background-color 0.3s ease;
+    transition: background-color 0.3s ease, opacity 0.3s ease;
 }
 
 .download-button:hover {
     background-color: #da190b;
     opacity: 0.8;
 }
-   
+
+/* Div para centralizar elementos */
 .div {
     display: flex;
     flex-direction: column;
@@ -118,81 +114,71 @@ button:hover {
     justify-content: center;
 }
 
-
+/* Input de arquivo */
 #profilePhoto {
-    width: 96%;
-     padding: 5px;
-     border: none;
-     border-radius: 5px;
-     background-color: rgb(92, 89, 89);
-     color: white;
-     font-size: 16px;
-     transition: background-color 0.3s ease;
-     cursor: pointer;
+    padding: 10px;
+    border: none;
+    border-radius: 5px;
+    background-color: rgb(92, 89, 89);
+    color: white;
+    font-size: 1rem;
+    cursor: pointer;
+    width: 100%;
+    max-width: 400px;
 }
 
-
+/* Checkbox customizado */
 .checkbox-label {
-    align-items: center;
     display: block;
-    margin-bottom: 1px;
-    font-size: 13px;
+    font-size: 0.875rem;
     font-weight: bold;
     color: white;
     height: 40px;
     cursor: pointer;
-
 }
 
 input[type="checkbox"] {
     appearance: none;
-    -webkit-appearance: none;
-    -moz-appearance: none;
     width: 20px;
     height: 20px;
     border: 2px solid #070606;
     border-radius: 3px;
     outline: none;
     cursor: pointer;
-    vertical-align: middle;
-  }
+}
 
-  /* Estilizando quando a checkbox está marcada */
-  input[type="checkbox"]:checked {
+input[type="checkbox"]:checked {
     background-color: black;
     border-color: #da190b;
-  }
-  
-  
-/* Estilizando o marcador (símbolo) da checkbox quando está marcada */
-  input[type="checkbox"]:checked::after {
-    content: "\2713"; /* Símbolo de marca de seleção */
+}
+
+input[type="checkbox"]:checked::after {
+    content: "\2713";
     font-size: 14px;
     color: rgb(253, 247, 247);
     text-align: center;
     line-height: 20px;
-  }
+}
 
+/* Ocultar seleÃ§Ã£o de foto de perfil inicialmente */
 .profile-photo-selection {
     display: none;
     cursor: pointer;
 }
 
+/* EstilizaÃ§Ã£o da seleÃ§Ã£o de loja */
 #lojaSelecionada {
-     color: black;
-     padding: 10px;
-     border: none;
-     border-radius: 5px;
-     background-color: rgb(92, 89, 89);
-     color: white;
-     font-size: 16px;
-     transition: background-color 0.3s ease;
-     margin-bottom: 7px;
-     cursor: pointer;
+    padding: 15px;
+    border: none;
+    border-radius: 5px;
+    background-color: rgb(92, 89, 89);
+    color: white;
+    font-size: 1rem;
+    transition: background-color 0.3s ease;
+    cursor: pointer;
 }
 
-
-
+/* Fontes personalizadas */
 @font-face {
     font-family: 'Gilroy-bold';
     src: url('fonts/gilroy-bold.otf') format('opentype');
@@ -202,11 +188,55 @@ input[type="checkbox"] {
     font-family: 'Gilroy-light';
     src: url('fonts/gilroy-light.otf') format('opentype');
 }
-   
-   
 
-   
-   
+/* Media Queries para responsividade */
+@media (max-width: 600px) {
+    body {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        padding: 20px;
+    }
 
+    .container {
+        width: 100%;
+        padding: 10px;
+        box-shadow: none;
+        margin: 0 auto; /* Certifica-se de que o container estÃ¡ centralizado */
+    }
 
-   
+    .form-wrapper input,
+    .form-wrapper select,
+    .form-wrapper button {
+        max-width: 100%;
+        margin: 0; /* Remove margens que poderiam deslocar os elementos */
+    }
+
+    .agp-logo {
+        width: 100%;
+        margin: 0; /* Centraliza a logo sem deslocar */
+    }
+
+    .page-title {
+        font-size: 1.5rem;
+        margin: 10px 0;
+    }
+
+    .form-wrapper {
+        gap: 10px;
+    }
+
+    .download-button {
+        width: 100%;
+        font-size: 1rem;
+        padding: 10px;
+        margin: 10px 0;
+    }
+
+    #assinaturaCriada img {
+        max-height: 200px;
+        width: 100%;
+        margin: 5px 0;
+    }
+}

@@ -1,27 +1,25 @@
 <!DOCTYPE html>
-<html>
+<html lang="pt">
 <head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="stylesheet" type="text/css" href="style.css">
     <link rel="icon" href="./img/icon.png" type="image/x-icon">
-    <title> Assinaturas AGP</title>
+    <title>Assinaturas AGP</title>
 </head>
 <body>
     <div class="container">
-        <a href="https://www.grupoagp.com.br/" target="_blank">
-            <img src="img/logo_agp.png" alt="" class="agp-logo">
+        <a href="https://grupoagp.edukon.app/" target="_blank">
+            <img src="img/logo_agp.png" alt="Logo AGP" class="agp-logo">
         </a>
         <h1 class="page-title">Sistema de Assinaturas</h1><br>
         <div class="form-wrapper">
-            <input id="nomeColaborador" type="text" placeholder="Nome e sobrenome do colaborador"><br><br>
-            <input id="cargoColaborador" type="text" placeholder="Cargo do colaborador"><br><br>
-            <input id="telefoneColaborador" type="text" placeholder="Telefone do colaborador"><br><br>
-            <label for="desejaAdicionarFoto" class="checkbox-label">
-                <input type="checkbox" id="desejaAdicionarFoto" onclick="mostrarEsconderPhoto()">
-                Deseja adicionar uma foto de perfil?
-            </label>
+            <input id="nomeColaborador" type="text" placeholder="Nome e sobrenome do colaborador">
+            <input id="cargoColaborador" type="text" placeholder="Cargo do colaborador">
+            <input id="telefoneColaborador" type="text" placeholder="Telefone do colaborador">
             <div id="profilePhotoSelection" class="profile-photo-selection">
                 <input type="file" id="profilePhoto" accept="image/*">
-            </div><br><br>
+            </div>
             <select id="lojaSelecionada">
                 <option value="grupoAgp">Grupo AGP</option>
                 <option value="extremaJlr">Extrema JLR</option>
@@ -29,7 +27,7 @@
                 <option value="orionKia">Orion KIA</option>
                 <option value="truckfor">Truckfor</option>
                 <option value="triumph">Triumph</option>
-            </select><br><br>
+            </select>
             <button onclick="criarAssinatura()">Criar Assinatura</button>
         </div>
     </div>
@@ -37,6 +35,3 @@
     <script src="script.js"></script>
 </body>
 </html>
-
-
-
