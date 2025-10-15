@@ -1,0 +1,79 @@
+#Nome do Workflow
+name: Workflow Assinatura
+
+#Gatilho: Executa em push para a branch principal (main)
+on:
+  push:
+    branches:
+      - main
+
+#Variáveis globais para o CI
+env:
+  HARBOR_REGISTRY: harbor.grupoagp.com.br
+  HARBOR_PROJECT: k8s # <- CORRIGIDO: O nome do projeto no Harbor
+  IMAGE_NAME: assinatura
+  KUBE_MANIFESTS_BRANCH: main
+  KUBE_MANIFESTS_PATH: k8s/manifests # Caminho dentro do seu repositório de manifests
+
+jobs:
+  build_and_push:
+    runs-on: ubuntu-latest
+    steps:
+    - name: 1. Checkout do Código Fonte
+      uses: actions/checkout@v4
+
+    - name: 2. Definir Tag da Imagem
+    # A tag será o hash do commit curto, garantindo unicidade
+      id: image
+      run: |
+        echo "TAG=$(echo ${GITHUB_SHA} | cut -c1-7)" >> $GITHUB_OUTPUT
+
+    - name: 3. Login no Harbor Registry
+      uses: docker/login-action@v3
+      with:
+        registry: ${{ env.HARBOR_REGISTRY }}
+        username: ${{ secrets.HARBOR_USERNAME }}
+        password: ${{ secrets.HARBOR_PASSWORD }}
+
+    - name: 4. Build da Imagem Docker
+      uses: docker/build-action@v5
+      with:
+        context: .
+        push: true
+        tags: ${{ env.HARBOR_REGISTRY }}/${{ env.HARBOR_PROJECT }}/${{ env.IMAGE_NAME }}:${{ steps.image.outputs.TAG }}
+        # Não incluir a tag 'latest' para o GitOps (evita problemas de cache)
+
+    - name: 5. Checkout do Repositório de Manifests
+      # Faz o checkout do repositório onde está o YAML de Deploy do Kubernetes
+      uses: actions/checkout@v4
+      with:
+        repository: ${{ secrets.KUBE_MANIFEST_REPO }}
+        token: ${{ secrets.KUBE_MANIFEST_TOKEN }}
+        path: manifests-repo
+        ref: ${{ env.KUBE_MANIFESTS_BRANCH }}
+
+    - name: 6. Atualizar a Tag da Imagem no Manifest
+      run: |
+        # Navega até o diretório do manifest do app
+        cd manifests-repo/${{ env.KUBE_MANIFESTS_PATH }}
+        
+        # Use o 'sed' para substituir a tag antiga pela nova (a ser definida na próxima seção)
+        # A aplicação usará a tag 'agp-tag-placeholder' no manifest inicial.
+        NEW_IMAGE_FULL_PATH="${{ env.HARBOR_REGISTRY }}/${{ env.HARBOR_PROJECT }}/${{ env.IMAGE_NAME }}:${{ steps.image.outputs.TAG }}"
+        
+        # A primeira substituição usa um placeholder, as próximas substituirão a tag anterior.
+        # Usamos | como delimitador no sed para evitar conflito com barras de path.
+        sed -i "s|image: .*|image: ${NEW_IMAGE_FULL_PATH}|g" deploy.yaml
+        
+        # Exemplo de como a substituição acontece:
+        # Antes: image: harbor.grupoagp.com.br/k8s/assinatura:agp-tag-placeholder
+        # Depois: image: harbor.grupoagp.com.br/k8s/assinatura:7c3b2f1
+
+    - name: 7. Commit e Push da Mudança do Manifest
+      run: |
+        cd k8s/manifests
+        git config user.name "wilkervinicius"
+        git config user.email "wilkervinicius@gmail.com"
+        git add ${{ env.KUBE_MANIFESTS_PATH }}/assinatura-k8s.yaml
+        git commit -m "CI: Atualizando ${{ env.IMAGE_NAME }} para tag ${{ steps.image.outputs.TAG }}" || echo "Nenhuma mudança no manifest."
+        git push

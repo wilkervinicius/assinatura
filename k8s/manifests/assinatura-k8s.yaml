@@ -1,23 +1,23 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: app-assinatura
+  name: assinatura
   labels:
-    app: app-assinatura
+    app: assinatura
 spec:
   replicas: 1
   selector:
     matchLabels:
-      app: app-assinatura
+      app: assinatura
   template:
     metadata:
       labels:
-        app: app-assinatura
+        app: assinatura
         monitoramento-prometheus: "enabled"
     spec:
       containers:
-        - name: app-assinatura-container
-          image: agptidocker/app-assinatura:3.3
+        - name: assinatura-container
+          image: harbor.grupoagp.com.br/k8s/assinatura:1.3
           imagePullPolicy: Always
           ports:
             - containerPort: 80
@@ -35,9 +35,9 @@ spec:
 apiVersion: networking.k8s.io/v1
 kind: Ingress
 metadata:
-  name: app-assinatura-ingress
+  name: assinatura-ingress
   labels:
-    app: app-assinatura
+    app: assinatura
   annotations:
     nginx.ingress.kubernetes.io/rewrite-target: /
 spec:
@@ -50,7 +50,7 @@ spec:
             pathType: Prefix
             backend:
               service:
-                name: app-assinatura-service # Aponta para o Service correto
+                name: assinatura-service # Aponta para o Service correto
                 port:
                   number: 80
 
