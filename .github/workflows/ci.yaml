@@ -36,7 +36,7 @@ jobs:
         password: ${{ secrets.HARBOR_PASSWORD }}
 
     - name: 4. Build da Imagem Docker
-      uses: docker/build-action@v5
+      uses: docker/build-push-action@v5
       with:
         context: .
         push: true
