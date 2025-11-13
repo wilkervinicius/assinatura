@@ -1,79 +1,79 @@
-#Nome do Workflow
-name: Workflow Assinatura
+name: Workflow Assinatura - CI/CD Local
 
-#Gatilho: Executa em push para a branch principal (main)
+# Gatilho: Executa em push para a branch principal (main)
 on:
   push:
-    branches:
-      - main
+    branches: [ main ]
 
-#Variáveis globais para o CI
+# Variáveis globais para o CI
 env:
   HARBOR_REGISTRY: harbor.grupoagp.com.br
-  HARBOR_PROJECT: k8s # <- CORRIGIDO: O nome do projeto no Harbor
+  HARBOR_PROJECT: k8s
   IMAGE_NAME: assinatura
-  KUBE_MANIFESTS_BRANCH: main
-  KUBE_MANIFESTS_PATH: k8s/manifests # Caminho dentro do seu repositório de manifests
+  # Caminho do manifest DENTRO DESTE REPOSITÓRIO
+  KUBE_MANIFESTS_PATH: k8s/manifests
+  # Nome EXATO do arquivo de deployment (seu 'assinatura-k8s.yaml')
+  DEPLOYMENT_FILE_NAME: assinatura-k8s.yaml
 
 jobs:
-  build_and_push:
+  build_and_push_and_update_manifest:
     runs-on: ubuntu-latest
+    
+    # Permissões: 'contents: write' é crucial para que o passo 7 (Commit e Push) funcione
+    permissions:
+      contents: write
+      
     steps:
-    - name: 1. Checkout do Código Fonte
-      uses: actions/checkout@v4
+      - name: 1. Checkout do Código Fonte (inclui os Manifests)
+        # Baixa o repositório atual
+        uses: actions/checkout@v4
 
-    - name: 2. Definir Tag da Imagem
-    # A tag será o hash do commit curto, garantindo unicidade
-      id: image
-      run: |
-        echo "TAG=$(echo ${GITHUB_SHA} | cut -c1-7)" >> $GITHUB_OUTPUT
+      # -- CI: Build e Push da Imagem --
 
-    - name: 3. Login no Harbor Registry
-      uses: docker/login-action@v3
-      with:
-        registry: ${{ env.HARBOR_REGISTRY }}
-        username: ${{ secrets.HARBOR_USERNAME }}
-        password: ${{ secrets.HARBOR_PASSWORD }}
+      - name: 2. Setup Buildx (Motor de build do Docker)
+        uses: docker/setup-buildx-action@v3
 
-    - name: 4. Build da Imagem Docker
-      uses: docker/build-action@v5
-      with:
-        context: .
-        push: true
-        tags: ${{ env.HARBOR_REGISTRY }}/${{ env.HARBOR_PROJECT }}/${{ env.IMAGE_NAME }}:${{ steps.image.outputs.TAG }}
-        # Não incluir a tag 'latest' para o GitOps (evita problemas de cache)
+      - name: 3. Definir Tag da Imagem (Hash Curto do Commit)
+        id: image
+        run: |
+          echo "TAG=$(echo ${GITHUB_SHA} | cut -c1-7)" >> $GITHUB_OUTPUT
+      
+      - name: 4. Login no Harbor Registry
+        uses: docker/login-action@v3
+        with:
+          registry: ${{ env.HARBOR_REGISTRY }}
+          username: ${{ secrets.HARBOR_USERNAME }}
+          password: ${{ secrets.HARBOR_PASSWORD }}
 
-    - name: 5. Checkout do Repositório de Manifests
-      # Faz o checkout do repositório onde está o YAML de Deploy do Kubernetes
-      uses: actions/checkout@v4
-      with:
-        repository: ${{ secrets.KUBE_MANIFEST_REPO }}
-        token: ${{ secrets.KUBE_MANIFEST_TOKEN }}
-        path: manifests-repo
-        ref: ${{ env.KUBE_MANIFESTS_BRANCH }}
+      - name: 5. Build e Push da Imagem Docker para o Harbor
+        uses: docker/build-push-action@v5
+        with:
+          context: .
+          push: true
+          # Tags completas: harbor.grupoagp.com.br/k8s/assinatura:838ab6d
+          tags: ${{ env.HARBOR_REGISTRY }}/${{ env.HARBOR_PROJECT }}/${{ env.IMAGE_NAME }}:${{ steps.image.outputs.TAG }}
+          cache-from: type=gha 
+          cache-to: type=gha,mode=max 
+          
+      # -- CD: GitOps Local (Aciona Argo CD) --
+      
+      - name: 6. Atualizar a Tag da Imagem no Manifest Local
+        # Define o caminho completo para o arquivo
+        run: |
+          MANIFEST_FILE="${{ env.KUBE_MANIFESTS_PATH }}/${{ env.DEPLOYMENT_FILE_NAME }}"
+          NEW_IMAGE_FULL_PATH="${{ env.HARBOR_REGISTRY }}/${{ env.HARBOR_PROJECT }}/${{ env.IMAGE_NAME }}:${{ steps.image.outputs.TAG }}"
+          
+          echo "Atualizando manifest: ${MANIFEST_FILE}"
+          
+          # Usa o 'sed' para encontrar a linha 'image: [qualquer coisa]' e substitui pela nova tag.
+          # Você deve garantir que a linha da imagem no 'assinatura-k8s.yaml' comece exatamente com 'image: '
+          sed -i "s|image: .*|image: ${NEW_IMAGE_FULL_PATH}|g" "${MANIFEST_FILE}"
 
-    - name: 6. Atualizar a Tag da Imagem no Manifest
-      run: |
-        # Navega até o diretório do manifest do app
-        cd manifests-repo/${{ env.KUBE_MANIFESTS_PATH }}
-        
-        # Use o 'sed' para substituir a tag antiga pela nova (a ser definida na próxima seção)
-        # A aplicação usará a tag 'agp-tag-placeholder' no manifest inicial.
-        NEW_IMAGE_FULL_PATH="${{ env.HARBOR_REGISTRY }}/${{ env.HARBOR_PROJECT }}/${{ env.IMAGE_NAME }}:${{ steps.image.outputs.TAG }}"
-        
-        # A primeira substituição usa um placeholder, as próximas substituirão a tag anterior.
-        # Usamos | como delimitador no sed para evitar conflito com barras de path.
-        sed -i "s|image: .*|image: ${NEW_IMAGE_FULL_PATH}|g" deploy.yaml
-        
-        # Exemplo de como a substituição acontece:
-        # Antes: image: harbor.grupoagp.com.br/k8s/assinatura:agp-tag-placeholder
-        # Depois: image: harbor.grupoagp.com.br/k8s/assinatura:7c3b2f1
-
-    - name: 7. Commit e Push da Mudança do Manifest
-      run: |
-        cd k8s/manifests
-        git config user.name "wilkervinicius"
-        git config user.email "wilkervinicius@gmail.com"
-        git add ${{ env.KUBE_MANIFESTS_PATH }}/assinatura-k8s.yaml
-        git commit -m "CI: Atualizando ${{ env.IMAGE_NAME }} para tag ${{ steps.image.outputs.TAG }}" || echo "Nenhuma mudança no manifest."
-        git push
+      - name: 7. Commit e Push da Mudança do Manifest (Aciona Argo CD)
+        # Usa a ação EndBug/add-and-commit para commitar a mudança no MESMO repositório
+        uses: EndBug/add-and-commit@v9
+        with:
+          message: 'CI/CD: Atualizando ${{ env.IMAGE_NAME }} para tag ${{ steps.image.outputs.TAG }}'
+          # Adiciona apenas o arquivo do manifest que foi alterado
+          add: ${{ env.KUBE_MANIFESTS_PATH }}/${{ env.DEPLOYMENT_FILE_NAME }}
+          # O GITHUB_TOKEN será usado para o push (requer 'permissions: contents: write' acima)

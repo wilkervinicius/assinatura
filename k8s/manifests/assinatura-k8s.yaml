@@ -18,13 +18,17 @@ spec:
     spec:
       containers:
         - name: assinatura-container
+<<<<<<< HEAD
           image: agptidocker/app-assinatura:3.3
+=======
+          image: harbor.grupoagp.com.br/k8s/assinatura:1bc381e
+>>>>>>> 33104e28bb345b77fc90848d8e8d8797d20781d2
           imagePullPolicy: Always
           ports:
             - containerPort: 80
               name: http
         - name: nginx-exporter
-          image: nginx/nginx-prometheus-exporter:0.11.0
+          image: harbor.grupoagp.com.br/k8s/assinatura:1bc381e
           args:
             - -nginx.scrape-uri=http://localhost:80/stub_status
           ports:
