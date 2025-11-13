@@ -18,7 +18,7 @@ spec:
     spec:
       containers:
         - name: assinatura-container
-          image: harbor.grupoagp.com.br/k8s/assinatura:c56028b
+          image: harbor.grupoagp.com.br/k8s/assinatura:d302e57
           imagePullPolicy: Always
           ports:
             - containerPort: 80
@@ -27,7 +27,7 @@ spec:
 =======
 <<<<<<< HEAD
         # - name: nginx-exporter
-        #   image: harbor.grupoagp.com.br/k8s/assinatura:c56028b
+        #   image: harbor.grupoagp.com.br/k8s/assinatura:d302e57
         #   args:
         #     - -nginx.scrape-uri=http://localhost:80/stub_status
         #   ports:
@@ -35,7 +35,7 @@ spec:
         #       name: metrics
 =======
         - name: nginx-exporter
-          image: harbor.grupoagp.com.br/k8s/assinatura:c56028b
+          image: harbor.grupoagp.com.br/k8s/assinatura:d302e57
           args:
             - -nginx.scrape-uri=http://localhost:80/stub_status
           ports:
