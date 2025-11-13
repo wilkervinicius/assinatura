@@ -40,10 +40,7 @@ spec:
       name: http
   selector:
     app: assinatura
-
 ---
-# --- 3. Ingress ---
-# O Ingress gere o acesso externo à sua aplicação.
 apiVersion: networking.k8s.io/v1
 kind: Ingress
 metadata:
@@ -51,20 +48,17 @@ metadata:
   namespace: assinatura
   labels:
     app: assinatura
-  annotations:
-    nginx.ingress.kubernetes.io/rewrite-target: /
+  # Removi a annotation de rewrite para evitar quebra de CSS/JS
 spec:
   ingressClassName: nginx
   rules:
-    - host: "assinatura.k8s.local" # O domínio para aceder à aplicação
+    - host: "assinatura.k8s.local"
       http:
         paths:
           - path: /
             pathType: Prefix
             backend:
               service:
-                name: assinatura # Aponta para o Service correto
+                name: assinatura
                 port:
                   number: 80
-
-
