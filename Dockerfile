@@ -18,9 +18,8 @@ COPY . $APP
 RUN rm /etc/nginx/conf.d/default.conf
 COPY nginx.conf /etc/nginx/conf.d/default.conf
 
-# Opcional: substitui a config padrão para habilitar cache estático leve e CORS de fontes
-# Comente a linha abaixo caso não vá usar 'default.conf'
-#COPY default.conf /etc/nginx/conf.d/default.conf
+COPY entrypoint.sh /entrypoint.sh
+RUN chmod +x /entrypoint.sh
 
 # Exponha a porta do NGINX
 EXPOSE 80
@@ -28,7 +27,8 @@ EXPOSE 80
 # O comando padrão do nginx já é definido pela imagem base
 
 # Comando para iniciar o Nginx
-CMD ["nginx", "-g", "daemon off;"]
+#CMD ["nginx", "-g", "daemon off;"]
+ENTRYPOINT ["/entrypoint.sh"]
 
 
 #docker build -t agptidocker/app-assinatura:3.x .   <---versao

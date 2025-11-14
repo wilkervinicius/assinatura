@@ -25,6 +25,11 @@ spec:
           ports:
             - containerPort: 80
               name: http
+          env:
+            - name: POD_NAME
+              valueFrom:
+                fieldRef:
+                  fieldPath: metadata.name
 ---
 apiVersion: v1
 kind: Service

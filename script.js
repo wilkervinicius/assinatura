@@ -1,3 +1,24 @@
+fetch('/podname.txt')
+    .then(res => res.text())
+    .then(podName => {
+        let el = document.getElementById("podNameInfo");
+        if (el) {
+            el.textContent = "Pod ativo: " + podName;
+        } else {
+            document.body.insertAdjacentHTML(
+                "afterbegin",
+                `<h2 id="podNameInfo" style="text-align:center; color:#555; font-family:Arial; margin-top:10px">
+                    Pod ativo: ${podName}
+                </h2>`
+            );
+        }
+    })
+    .catch(err => console.log("Erro ao obter nome do pod:", err));
+
+
+
+
+
 function criarAssinatura() {
     var container = document.getElementById('assinaturaCriada');
     while (container.firstChild) {
