@@ -16,6 +16,8 @@ spec:
         app: assinatura
         monitoramento-prometheus: "enabled"
     spec:
+      imagePullSecrets:
+        - name: harbor-registry-secret
       containers:
         - name: assinatura-container
           image: harbor.grupoagp.com.br/k8s/assinatura:d302e57
